@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
+import 'package:jobber/themes/jobber_theme.dart';
 import 'package:jobber/views/main_view.dart';
 
 class SplashView extends StatefulWidget {
@@ -35,15 +36,18 @@ class _SplashViewState extends State<SplashView> {
   Widget build(BuildContext context) {
 
     return Scaffold(
-      body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            Text(
-              'Jobber',
-              style: Theme.of(context).textTheme.display1,
-            ),
-          ],
+      body: Container(
+        color: JobberTheme.accentColor,
+        child: Center(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: <Widget>[
+              Text(
+                'Jobber',
+                style: Theme.of(context).textTheme.display1.copyWith(color: Colors.white),
+              ),
+            ],
+          ),
         ),
       ),
     );

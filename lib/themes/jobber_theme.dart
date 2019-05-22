@@ -5,6 +5,13 @@ import 'package:flutter/material.dart';
 class JobberTheme{
 
   static Color purple = const Color(0xFF7716a0);
+
+  static Color purpleHight = const Color(0xFF7d05cf);
+  static Color purpleLow = const Color(0xFFec6ff7);
+
+  static Color accentColor = const Color(0xFF7d05cf);
+  static Color accentColorHalf = const Color(0xFF7d05cf).withOpacity(0.75);
+
   static Color white = const Color(0xFFFAFAFA);
 
 
