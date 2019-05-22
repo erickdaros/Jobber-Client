@@ -2,7 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
-import 'package:jobber/models/ask_model.dart';
+import 'package:jobber/models/proposal_model.dart';
 import 'package:jobber/themes/jobber_theme.dart';
 import 'package:jobber/widgets/easing_animation.dart';
 import 'package:jobber/widgets/job_card.dart';
