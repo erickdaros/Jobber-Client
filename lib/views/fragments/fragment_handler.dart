@@ -1,0 +1,4 @@
+enum Fragment {
+  Proposal,
+  Settings
+}

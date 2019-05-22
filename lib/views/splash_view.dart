@@ -3,10 +3,11 @@ import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
 import 'package:jobber/themes/jobber_theme.dart';
 import 'package:jobber/views/main_view.dart';
+import 'package:flutter_statusbarcolor/flutter_statusbarcolor.dart';
 
 class SplashView extends StatefulWidget {
 
-  static String routeName = 'splashPage';
+  static String routeName = 'splashView';
 
   SplashView({Key key}) : super(key: key);
 
@@ -28,6 +29,7 @@ class _SplashViewState extends State<SplashView> {
   }
 
   _fetchSessionAndNavigate() async{
+    await FlutterStatusbarcolor.setNavigationBarColor(Colors.transparent);
     Navigator.of(context)
         .pushReplacementNamed(MainView.routeName);
   }
@@ -44,7 +46,7 @@ class _SplashViewState extends State<SplashView> {
             children: <Widget>[
               Text(
                 'Jobber',
-                style: Theme.of(context).textTheme.display1.copyWith(color: Colors.white),
+                style: Theme.of(context).textTheme.display1.copyWith(color: Colors.white,fontFamily: 'Chillout'),
               ),
             ],
           ),

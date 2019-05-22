@@ -94,71 +94,91 @@ class JobCardRoot extends StatelessWidget {
 
 
     if (orientation == Orientation.portrait) {
-      return new Container(
-        child: new Card(
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(15.0),
-            ),
-            margin: EdgeInsets.only(right: 10.0, left: 10.0),
-            elevation: 16,
-            child: new Center(
-              child: ResponsiveContainer(
-                heightPercent: isIPhoneX(context) ? heightPercent - 9 : heightPercent,
-                setwidthModifier: true,
-                widthModifier: widthModifier,
-                child: Padding(
-                  padding: const EdgeInsets.symmetric(vertical: 10),
-                  child: Column(
-                    children: <Widget>[
-                      Expanded(
-                        flex: 2,
-                        child: Padding(
-                          padding: const EdgeInsets.symmetric(horizontal: 15),
-                          child: Container(
-                            child: Align(
-                              alignment: Alignment.centerLeft,
-                              child: new Text(
-                                  title,
-                                  textAlign: TextAlign.left,
-                                  maxLines: 2,
-                                  overflow: TextOverflow.ellipsis,
-                                  style: TextStyle(
-                                      fontWeight: FontWeight.bold,
-                                      fontSize: 17,
-                                  )
+      return Material(
+        child: new Container(
+//          child: Hero(
+//            tag: 'propose_card'+title,
+            child: new Card(
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(15.0),
+                ),
+                margin: EdgeInsets.only(right: 10.0, left: 10.0),
+                elevation: 16,
+                child: new Center(
+                  child: ResponsiveContainer(
+                    heightPercent: isIPhoneX(context) ? heightPercent - 9 : heightPercent,
+                    setwidthModifier: true,
+                    widthModifier: widthModifier,
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(vertical: 10),
+                      child: Column(
+                        children: <Widget>[
+                          Expanded(
+                            flex: 2,
+                            child: Padding(
+                              padding: const EdgeInsets.symmetric(horizontal: 15),
+                              child: Container(
+                                child: Align(
+                                  alignment: Alignment.centerLeft,
+                                  child: Hero(
+                                    tag: 'propose_title'+title,
+                                    child: Material(
+                                      child: new Text(
+                                          title,
+                                          textAlign: TextAlign.left,
+                                          maxLines: 2,
+                                          overflow: TextOverflow.ellipsis,
+                                          style: TextStyle(
+                                              fontWeight: FontWeight.bold,
+                                              fontSize: 17,
+                                          )
+                                      ),
+                                    ),
+                                  ),
+                                ),
                               ),
                             ),
                           ),
-                        ),
-                      ),
-                      Expanded(
-                        flex: 3,
-                        child: Padding(
-                          padding: const EdgeInsets.only(left: 15, right: 15),
-                          child: Text(description,
-                            textAlign: TextAlign.justify,
-                            overflow: TextOverflow.ellipsis,
-                            maxLines: 4,
-                            softWrap: false,
+                          Expanded(
+                            flex: 3,
+                            child: Padding(
+                              padding: const EdgeInsets.only(left: 15, right: 15),
+                              child: Hero(
+                                tag: 'propose_details'+title,
+                                child: Material(
+                                  child: Text(description,
+                                    textAlign: TextAlign.justify,
+                                    overflow: TextOverflow.ellipsis,
+                                    maxLines: 4,
+                                    softWrap: false,
+                                  ),
+                                ),
+                              ),
+                            ),
                           ),
-                        ),
+                          Expanded(
+                            flex: 2,
+                            child: Padding(
+                              padding: const EdgeInsets.only(left: 15,right: 15),
+                              child: Hero(
+                                tag: 'propose_skills'+title,
+                                child: Material(
+                                  child: ListView(
+                                    scrollDirection: Axis.horizontal,
+                                    children: skillChips
+                                  ),
+                                ),
+                              ),
+                            ),
+                          )
+                        ],
                       ),
-                      Expanded(
-                        flex: 2,
-                        child: Padding(
-                          padding: const EdgeInsets.only(left: 15,right: 15),
-                          child: ListView(
-                            scrollDirection: Axis.horizontal,
-                            children: skillChips
-                          ),
-                        ),
-                      )
-                    ],
+                    ),
                   ),
-                ),
-              ),
-            )
-        ),
+                )
+            ),
+          ),
+//        ),
       );
     }else{
       return new Container(

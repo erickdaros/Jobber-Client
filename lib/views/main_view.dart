@@ -4,13 +4,15 @@ import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
 import 'package:jobber/models/proposal_model.dart';
 import 'package:jobber/themes/jobber_theme.dart';
-import 'package:jobber/widgets/easing_animation.dart';
-import 'package:jobber/widgets/job_card.dart';
-import 'package:jobber/widgets/jobber_drawer.dart';
+
+import 'fragments/fragment_handler.dart';
+import 'fragments/proposal_fragment.dart';
+import 'fragments/settings_fragment.dart';
+import 'package:flutter_statusbarcolor/flutter_statusbarcolor.dart';
 
 class MainView extends StatefulWidget {
 
-  static String routeName = 'mainPage';
+  static String routeName = 'mainView';
 
   MainView({Key key}) : super(key: key);
 
@@ -22,9 +24,14 @@ class _MainViewState extends State<MainView> {
 
   final GlobalKey<RefreshIndicatorState> _refreshIndicatorKey =
   new GlobalKey<RefreshIndicatorState>();
+  GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
+
+  Widget bodyContent;
+  bool showFAB;
+  Fragment activeFragment;
+  String title;
 
   bool isGrid = true;
-
 
   ScrollController _scrollViewController;
   GlobalKey viewPortKey;
@@ -32,9 +39,48 @@ class _MainViewState extends State<MainView> {
   @override
   void initState() {
     super.initState();
+    setStatuBarDefault();
     SystemChrome.setEnabledSystemUIOverlays(SystemUiOverlay.values);
     _scrollViewController = new ScrollController();
     viewPortKey = GlobalKey();
+
+    bodyContent = ProposalFragment(
+      showAnimation: true,
+    );
+    title = ProposalFragment.title;
+    showFAB = true;
+    activeFragment = Fragment.Proposal;
+  }
+
+  void setStatuBarDefault() async{
+    await FlutterStatusbarcolor.setStatusBarColor(Colors.transparent);
+  }
+
+  void switchToFragment(Fragment fragment){
+    switch(fragment){
+      case Fragment.Proposal:
+        setState(() {
+          bodyContent = ProposalFragment();
+          title = ProposalFragment.title;
+          showFAB = true;
+          activeFragment = Fragment.Proposal;
+        });
+        break;
+      case Fragment.Settings:
+        setState(() {
+          bodyContent = SettingsFragment();
+          title = SettingsFragment.title;
+          showFAB = false;
+          activeFragment = Fragment.Settings;
+        });
+        break;
+    }
+    closeDrawer();
+  }
+
+  void closeDrawer(){
+    if(_scaffoldKey.currentState.isDrawerOpen)
+      Navigator.pop(context);
   }
 
   @override
@@ -69,71 +115,168 @@ class _MainViewState extends State<MainView> {
     ScrollController _scrollViewController = new ScrollController();
 
     return Scaffold(
+      key: _scaffoldKey,
       appBar: AppBar(
-        title: Text("Propostas"),
-        backgroundColor: JobberTheme.white,
-        elevation: 0,
+        title: Text(title),
+//        backgroundColor: JobberTheme.white,
+        elevation: activeFragment==Fragment.Proposal?0:4,
       ),
-      drawer: JobberDrawer(),
-      body: Container(
-        key: viewPortKey,
-        child: EasingAnimation(
-          child: RefreshIndicator(
-            key: _refreshIndicatorKey,
-            onRefresh: _refresh,
-            color: JobberTheme.purple,
-            child: ListView.builder(
-                itemCount: litems.length,
-                physics: BouncingScrollPhysics(),
-                itemBuilder: (BuildContext context, int index) {
-                  return Padding(
-                    padding: index==0?const EdgeInsets.only(top: 15, bottom: 25):const EdgeInsets.only(bottom: 25),
-                    child: Container(
-                      child: new GestureDetector(
-                        child: new JobCard(
-                          heightPercent: 25,
-                          widthModifier: 5,
-                          title: litems[index].title,
-                          description: litems[index].description,
-                          skills: litems[index].skills,
-                        ),
-                        onTap: () {
-//                    showDialog(
-//                      barrierDismissible: false,
-//                      context: context,
-//                      child: new CupertinoAlertDialog(
-//                        title: new Column(
-//                          children: <Widget>[
-//                            new Text("GridView"),
-//                            new Icon(
-//                              Icons.favorite,
-//                              color: Colors.green,
-//                            ),
-//                          ],
+      drawer: Drawer(
+        child: ListView(
+          padding: EdgeInsets.zero,
+          children: <Widget>[
+            UserAccountsDrawerHeader(
+              decoration: new BoxDecoration(
+                  gradient: new LinearGradient(
+                      colors: [
+                        JobberTheme.purple,
+                        JobberTheme.purple.withOpacity(0.5),
+                      ],
+                      begin: const FractionalOffset(1.0, 0.0),
+                      end: const FractionalOffset(0.0, 0.0),
+                      stops: [0.0, 1.0],
+                      tileMode: TileMode.clamp
+                  )
+              ),
+              currentAccountPicture: Container(
+                decoration: BoxDecoration(
+                    shape: BoxShape.circle,
+                    image: DecorationImage(
+                        fit: BoxFit.fill,
+                        image:AssetImage("assets/profile.jpg"))),
+              ),
+              accountName: new Container(
+                  child: Text(
+                    'Erick Daros Silva',
+                    style: TextStyle(color: Colors.white),
+                  )),
+              accountEmail: new Container(
+                  child: Text(
+                    'erickdarosilva@gmail.com',
+                    style: TextStyle(color: Colors.white),
+                  )),
+            ),
+//          MaterialButton(
+//            height: 1,
+//            padding: EdgeInsets.all(20.0),
+//            onPressed: () => {_onGridChange(!isGrid)},
+//            child: Row(
+//              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+//              children: <Widget>[
+//                Container(
+//                    child: Row(
+//                      children: <Widget>[
+//                        Icon(Icons.view_column),
+//                        Padding(
+//                          padding: const EdgeInsets.only(left: 15),
+//                          child: Text('Mostrar duas colunas'),
 //                        ),
-//                        content: new Text("Selected Item $index"),
-//                        actions: <Widget>[
-//                          new FlatButton(
-//                              onPressed: () {
-//                                Navigator.of(context).pop();
-//                              },
-//                              child: new Text("OK"))
-//                        ],
-//                      ),
-//                    );
-                        },
-                      ),
-                    ),
-                  );
-                }),
-          ),
+//                      ],
+//                    )),
+//                Switch(
+//                  value: isGrid,
+//                  onChanged: _onGridChange,
+//                  activeColor: JobberTheme.purple,
+//                ),
+//              ],
+//            ),
+//          ),
+            ListTile(
+              title: Row(
+                children: <Widget>[
+                  Padding(
+                    padding: const EdgeInsets.only(right: 7),
+                    child: Icon(Icons.description),
+                  ),
+                  Text('Propostas'),
+                ],
+              ),
+              onTap: () {
+                switchToFragment(Fragment.Proposal);
+              },
+            ),
+            ListTile(
+              title: Row(
+                children: <Widget>[
+                  Padding(
+                    padding: const EdgeInsets.only(right: 7),
+                    child: Icon(Icons.assessment),
+                  ),
+                  Text('Minhas Contribuições'),
+                ],
+              ),
+              onTap: () {
+                // Update the state of the app
+                // ...
+              },
+            ),
+            ListTile(
+              title: Row(
+                children: <Widget>[
+                  Padding(
+                    padding: const EdgeInsets.only(right: 7),
+                    child: Icon(Icons.add_to_photos),
+                  ),
+                  Text('Minhas Propostas'),
+                ],
+              ),
+              onTap: () {
+                // Update the state of the app
+                // ...
+              },
+            ),
+            ListTile(
+              title: Row(
+                children: <Widget>[
+                  Padding(
+                    padding: const EdgeInsets.only(right: 7),
+                    child: Icon(Icons.notifications),
+                  ),
+                  Text('Avisos'),
+                ],
+              ),
+              onTap: () {
+              },
+            ),
+            ListTile(
+              title: Row(
+                children: <Widget>[
+                  Padding(
+                    padding: const EdgeInsets.only(right: 7),
+                    child: Icon(Icons.settings),
+                  ),
+                  Text('Configurações'),
+                ],
+              ),
+              onTap: () {
+                switchToFragment(Fragment.Settings);
+              },
+            ),
+            ListTile(
+              title: Row(
+                children: <Widget>[
+                  Padding(
+                    padding: const EdgeInsets.only(right: 7),
+                    child: Icon(Icons.exit_to_app),
+                  ),
+                  Text('Sair'),
+                ],
+              ),
+              onTap: () {
+                // Update the state of the app
+                // ...
+              },
+            ),
+          ],
         ),
       ),
-//    floatingActionButton: FloatingActionButton(
+      body: bodyContent,
+      floatingActionButton: showFAB ? FloatingActionButton(
 //        onPressed: _incrementCounter,
-//        tooltip: 'Increment',
-//        child: Icon(Icons.add),
-//      ),
+        tooltip: 'Increment',
+        child: Icon(Icons.add,color: Colors.white,),
+        backgroundColor: JobberTheme.accentColorHalf,
+      ) : Container(),
     );
   }
 }

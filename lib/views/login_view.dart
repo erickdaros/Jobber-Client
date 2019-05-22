@@ -4,7 +4,7 @@ import 'package:flutter/widgets.dart';
 
 class LoginView extends StatefulWidget {
 
-  static String routeName = 'loginPage';
+  static String routeName = 'loginView';
 
   LoginView({Key key}) : super(key: key);
 
