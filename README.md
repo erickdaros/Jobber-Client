@@ -1,5 +1,4 @@
-<<<<<<< HEAD
-# jobber
+# Jobber
 
 Uma maneira facil de encontrar pessoas qualificadas para ajudar com seu projeto dentro do Unileste.
 
@@ -15,6 +14,3 @@ A few resources to get you started if this is your first Flutter project:
 For help getting started with Flutter, view our 
 [online documentation](https://flutter.io/docs), which offers tutorials, 
 samples, guidance on mobile development, and a full API reference.
-=======
-# Jobber-Client
->>>>>>> 3b036b3488ba0df2234949c5ffb8830230f639c3
