@@ -82,46 +82,48 @@ class _MainViewState extends State<MainView> {
             key: _refreshIndicatorKey,
             onRefresh: _refresh,
             color: JobberTheme.purple,
-            child: GridView.builder(
+            child: ListView.builder(
                 itemCount: litems.length,
                 physics: BouncingScrollPhysics(),
-                gridDelegate:
-                new SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: isGrid?2:1),
                 itemBuilder: (BuildContext context, int index) {
-                  return new GestureDetector(
-                    child: new JobCard(
-                      heightPercent: isGrid?22:45,
-                      isMini: isGrid,
-                      widthModifier: 5,
-                      title: litems[index].title,
-                      description: litems[index].description,
-                      skills: litems[index].skills,
-                    ),
-                    onTap: () {
-                      showDialog(
-                        barrierDismissible: false,
-                        context: context,
-                        child: new CupertinoAlertDialog(
-                          title: new Column(
-                            children: <Widget>[
-                              new Text("GridView"),
-                              new Icon(
-                                Icons.favorite,
-                                color: Colors.green,
-                              ),
-                            ],
-                          ),
-                          content: new Text("Selected Item $index"),
-                          actions: <Widget>[
-                            new FlatButton(
-                                onPressed: () {
-                                  Navigator.of(context).pop();
-                                },
-                                child: new Text("OK"))
-                          ],
+                  return Padding(
+                    padding: index==0?const EdgeInsets.only(top: 15, bottom: 25):const EdgeInsets.only(bottom: 25),
+                    child: Container(
+                      child: new GestureDetector(
+                        child: new JobCard(
+                          heightPercent: 25,
+                          widthModifier: 5,
+                          title: litems[index].title,
+                          description: litems[index].description,
+                          skills: litems[index].skills,
                         ),
-                      );
-                    },
+                        onTap: () {
+//                    showDialog(
+//                      barrierDismissible: false,
+//                      context: context,
+//                      child: new CupertinoAlertDialog(
+//                        title: new Column(
+//                          children: <Widget>[
+//                            new Text("GridView"),
+//                            new Icon(
+//                              Icons.favorite,
+//                              color: Colors.green,
+//                            ),
+//                          ],
+//                        ),
+//                        content: new Text("Selected Item $index"),
+//                        actions: <Widget>[
+//                          new FlatButton(
+//                              onPressed: () {
+//                                Navigator.of(context).pop();
+//                              },
+//                              child: new Text("OK"))
+//                        ],
+//                      ),
+//                    );
+                        },
+                      ),
+                    ),
                   );
                 }),
           ),

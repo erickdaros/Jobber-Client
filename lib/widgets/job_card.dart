@@ -18,7 +18,7 @@ class JobCard extends StatelessWidget{
     this.heightPercent,
     this.widthModifier,
     this.title="",
-    this.isMini,
+    this.isMini = false,
     this.description,
     this.skills
   }):super(key: key);
