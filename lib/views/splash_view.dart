@@ -1,19 +1,19 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
-import 'package:jobber/pages/main_page.dart';
+import 'package:jobber/views/main_view.dart';
 
-class SplashPage extends StatefulWidget {
+class SplashView extends StatefulWidget {
 
   static String routeName = 'splashPage';
 
-  SplashPage({Key key}) : super(key: key);
+  SplashView({Key key}) : super(key: key);
 
   @override
-  _SplashPageState createState() => _SplashPageState();
+  _SplashViewState createState() => _SplashViewState();
 }
 
-class _SplashPageState extends State<SplashPage> {
+class _SplashViewState extends State<SplashView> {
 
   @override
   void initState(){
@@ -28,7 +28,7 @@ class _SplashPageState extends State<SplashPage> {
 
   _fetchSessionAndNavigate() async{
     Navigator.of(context)
-        .pushReplacementNamed(MainPage.routeName);
+        .pushReplacementNamed(MainView.routeName);
   }
 
   @override

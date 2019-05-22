@@ -7,17 +7,17 @@ import 'package:jobber/themes/jobber_theme.dart';
 import 'package:jobber/widgets/easing_animation.dart';
 import 'package:jobber/widgets/job_card.dart';
 
-class MainPage extends StatefulWidget {
+class MainView extends StatefulWidget {
 
   static String routeName = 'mainPage';
 
-  MainPage({Key key}) : super(key: key);
+  MainView({Key key}) : super(key: key);
 
   @override
-  _MainPageState createState() => _MainPageState();
+  _MainViewState createState() => _MainViewState();
 }
 
-class _MainPageState extends State<MainPage> {
+class _MainViewState extends State<MainView> {
 
   final GlobalKey<RefreshIndicatorState> _refreshIndicatorKey =
   new GlobalKey<RefreshIndicatorState>();

@@ -2,17 +2,17 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
 
-class LoginPage extends StatefulWidget {
+class LoginView extends StatefulWidget {
 
   static String routeName = 'loginPage';
 
-  LoginPage({Key key}) : super(key: key);
+  LoginView({Key key}) : super(key: key);
 
   @override
-  _LoginPageState createState() => _LoginPageState();
+  _LoginViewState createState() => _LoginViewState();
 }
 
-class _LoginPageState extends State<LoginPage> {
+class _LoginViewState extends State<LoginView> {
   int _counter = 0;
 
   @override

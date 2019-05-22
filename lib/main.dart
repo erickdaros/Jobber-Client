@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:jobber/pages/login_page.dart';
-import 'package:jobber/pages/main_page.dart';
-import 'package:jobber/pages/splash_page.dart';
+import 'package:jobber/views/login_view.dart';
+import 'package:jobber/views/main_view.dart';
+import 'package:jobber/views/splash_view.dart';
 
 void main() => runApp(Jobber());
 
@@ -17,11 +17,11 @@ class Jobber extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.grey,
       ),
-      home: SplashPage(),
+      home: SplashView(),
       routes: {
-        SplashPage.routeName : (BuildContext context) => new SplashPage(),
-        LoginPage.routeName : (BuildContext context) => new LoginPage(),
-        MainPage.routeName : (BuildContext context) => new MainPage(),
+        SplashView.routeName : (BuildContext context) => new SplashView(),
+        LoginView.routeName : (BuildContext context) => new LoginView(),
+        MainView.routeName : (BuildContext context) => new MainView(),
       },
     );
   }
