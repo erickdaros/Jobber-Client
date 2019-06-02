@@ -79,15 +79,14 @@ class JobCardRoot extends StatelessWidget {
     skills.forEach((skill)=>skillChips.add(
         Padding(
           padding: const EdgeInsets.only(right: 5),
-          child: new ChoiceChip(
+          child: new ActionChip(
             label: Text(skill,
               style: TextStyle(
-                color: Colors.white,
+                color: Color(0xFFFFFFFF),
               ),
             ),
-            selected: false,
-            backgroundColor: JobberTheme.white,
-            disabledColor: JobberTheme.accentColorHalf,
+            backgroundColor: JobberTheme.accentColor,
+            onPressed: ()=>{},
           ),
         )
     ));
@@ -123,6 +122,7 @@ class JobCardRoot extends StatelessWidget {
                                   child: Hero(
                                     tag: 'propose_title'+title,
                                     child: Material(
+                                      color: Colors.transparent,
                                       child: new Text(
                                           title,
                                           textAlign: TextAlign.left,
@@ -146,6 +146,7 @@ class JobCardRoot extends StatelessWidget {
                               child: Hero(
                                 tag: 'propose_details'+title,
                                 child: Material(
+                                  color: Colors.transparent,
                                   child: Text(description,
                                     textAlign: TextAlign.justify,
                                     overflow: TextOverflow.ellipsis,
@@ -163,6 +164,7 @@ class JobCardRoot extends StatelessWidget {
                               child: Hero(
                                 tag: 'propose_skills'+title,
                                 child: Material(
+                                  color: Colors.transparent,
                                   child: ListView(
                                     scrollDirection: Axis.horizontal,
                                     children: skillChips

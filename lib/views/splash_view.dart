@@ -1,7 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
+import 'package:jobber/controllers/auth_controller.dart';
+import 'package:jobber/controllers/sharedpreferences_controller.dart';
+import 'package:jobber/controllers/storage_controller.dart';
+import 'package:jobber/models/user_model.dart';
 import 'package:jobber/themes/jobber_theme.dart';
+import 'package:jobber/views/login_view.dart';
 import 'package:jobber/views/main_view.dart';
 import 'package:flutter_statusbarcolor/flutter_statusbarcolor.dart';
 
@@ -30,8 +35,26 @@ class _SplashViewState extends State<SplashView> {
 
   _fetchSessionAndNavigate() async{
     await FlutterStatusbarcolor.setNavigationBarColor(Colors.transparent);
-    Navigator.of(context)
-        .pushReplacementNamed(MainView.routeName);
+    bool isFirstTime = await SharedPreferencesController.getBool(StorageKeys.isFirstTime);
+    if(isFirstTime){
+      await SharedPreferencesController.setString(StorageKeys.accessToken, null);
+      await SharedPreferencesController.setBool(StorageKeys.isUserLoggedIn, false);
+      await SharedPreferencesController.setBool(StorageKeys.isFirstTime, false);
+    }
+    bool isUserAuthenticated =  await AuthController.isUserAuthenticated();
+    if(isUserAuthenticated){
+      User user = await StorageController.getLocalUser();
+//      Navigator.of(context)
+//          .pushReplacementNamed(MainView.routeName);
+      Navigator.of(context).push(MaterialPageRoute<void>(
+          builder: (BuildContext context) {
+            return MainView(user: user,);
+          }
+      ));
+    }else{
+      Navigator.of(context)
+          .pushReplacementNamed(LoginView.routeName);
+    }
   }
 
   @override
@@ -39,7 +62,7 @@ class _SplashViewState extends State<SplashView> {
 
     return Scaffold(
       body: Container(
-        color: JobberTheme.accentColor,
+        color: JobberTheme.purple2,
         child: Center(
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,

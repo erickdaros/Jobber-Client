@@ -26,6 +26,10 @@ dependencies:
   dynamic_theme: ^1.0.1
   shared_preferences: ^0.5.2+1
   flutter_statusbarcolor: any
+  icons_helper: ^0.0.8
+  outline_material_icons: ^0.1.0
+  flutter_svg: 0.12.4+1
+  http: any
 
 dev_dependencies:
   flutter_test:
@@ -49,6 +53,8 @@ flutter:
   #  - images/a_dot_ham.jpeg
   assets:
     - assets/profile.jpg
+    - assets/login_logo.png
+    - assets/G_Logo.svg
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.io/assets-and-images/#resolution-aware.
@@ -73,8 +79,20 @@ flutter:
   #       - asset: fonts/TrajanPro_Bold.ttf
   #         weight: 700
   fonts:
-   - family: Chillout
-     fonts:
-       - asset: fonts/Chillout.ttf
+    - family: Chillout
+      fonts:
+        - asset: fonts/Chillout.ttf
+
+    - family: WorkSansSemiBold
+      fonts:
+        - asset: assets/fonts/Work_Sans/WorkSans-SemiBold.ttf
+
+    - family: WorkSansBold
+      fonts:
+        - asset: assets/fonts/Work_Sans/WorkSans-Bold.ttf
+
+    - family: WorkSansMedium
+      fonts:
+        - asset: assets/fonts/Work_Sans/WorkSans-Medium.ttf
   # For details regarding fonts from package dependencies,
   # see https://flutter.io/custom-fonts/#from-packages

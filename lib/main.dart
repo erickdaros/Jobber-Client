@@ -1,15 +1,19 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:jobber/themes/jobber_theme.dart';
-import 'package:jobber/views/proposaldetail_view.dart';
+import 'package:jobber/views/jobdetail_view.dart';
 import 'package:jobber/views/login_view.dart';
 import 'package:jobber/views/main_view.dart';
+import 'package:jobber/views/newjob_view.dart';
 import 'package:jobber/views/splash_view.dart';
 import 'package:dynamic_theme/dynamic_theme.dart';
 
 void main() => runApp(Jobber());
 
 class Jobber extends StatelessWidget {
+
+  static final routeObserver = RouteObserver<PageRoute>();
+
   @override
   Widget build(BuildContext context) {
 
@@ -26,11 +30,13 @@ class Jobber extends StatelessWidget {
           title: 'Jobber',
           theme: theme,
           home: SplashView(),
+          navigatorObservers: [routeObserver],
           routes: {
             SplashView.routeName : (BuildContext context) => new SplashView(),
             LoginView.routeName : (BuildContext context) => new LoginView(),
             MainView.routeName : (BuildContext context) => new MainView(),
-            ProposalDetailView.routeName : (BuildContext context) => new ProposalDetailView(),
+            JobDetailView.routeName : (BuildContext context) => new JobDetailView(),
+            NewJobView.routeName : (BuildContext context) => new NewJobView(),
           },
         );
       }

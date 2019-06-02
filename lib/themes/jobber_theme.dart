@@ -1,10 +1,13 @@
 import 'dart:ui';
-
 import 'package:flutter/material.dart';
 
 class JobberTheme{
 
+  const JobberTheme();
+
   static Color purple = const Color(0xFF7716a0);
+
+  static Color purple2 = const Color(0xFF7B05AF);
 
   static Color purpleHight = const Color(0xFF7d05cf);
   static Color purpleLow = const Color(0xFFec6ff7);
@@ -25,6 +28,19 @@ class JobberTheme{
   static Color defaultTransparentStatusBar = const Color(0x1A000000);
   static Color defaultTransparentStatusBar2 = const Color(0x40000000);
 
+//  static const Color loginGradientStart = const Color(0xFFfbab66);
+//  static const Color loginGradientEnd = const Color(0xFFf7418c);
+
+  static const Color loginGradientStart = const Color(0xFFd500ff);
+  static const Color loginGradientEnd = const Color(0xFF3f0979);
+
+  static const primaryGradient = const LinearGradient(
+    colors: const [loginGradientStart, loginGradientEnd],
+    stops: const [0.0, 1.0],
+    begin: Alignment.topCenter,
+    end: Alignment.bottomCenter,
+  );
+
   static ThemeData buildTheme(Brightness brightness) {
     return brightness == Brightness.dark
     //Tema Dark
@@ -44,6 +60,9 @@ class JobberTheme{
       backgroundColor: Colors.black,
       primaryColor: const Color(0xFF303030),
       accentColor: Colors.grey.shade50,
+      textSelectionColor: JobberTheme.purple,
+      textSelectionHandleColor: JobberTheme.purple,
+      cursorColor: JobberTheme.purple,
     )
 
     //Tema light
@@ -96,6 +115,9 @@ class JobberTheme{
       backgroundColor: Colors.white,
       primaryColor: Colors.grey.shade50,
       accentColor: Colors.grey.shade50,
+      textSelectionColor: JobberTheme.purple,
+      textSelectionHandleColor: JobberTheme.purple,
+      cursorColor: JobberTheme.purple,
     );
   }
 }

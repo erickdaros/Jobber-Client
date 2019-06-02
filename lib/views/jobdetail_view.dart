@@ -1,22 +1,22 @@
  import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:jobber/models/proposal_model.dart';
+import 'package:jobber/models/job_model.dart';
 import 'package:jobber/themes/jobber_theme.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-class ProposalDetailView extends StatefulWidget {
+class JobDetailView extends StatefulWidget {
 
   static const String routeName = 'preference';
 
   final Proposal proposal;
 
-  ProposalDetailView({Key key, @required this.proposal}): super(key: key);
+  JobDetailView({Key key, @required this.proposal}): super(key: key);
 
   @override
-  State createState() => _ProposalDetailViewState();
+  State createState() => _JobDetailViewState();
 }
 
-class _ProposalDetailViewState extends State<ProposalDetailView> {
+class _JobDetailViewState extends State<JobDetailView> {
   static final GlobalKey<ScaffoldState> _scaffoldKey =
   GlobalKey<ScaffoldState>();
   SharedPreferences _sharedPreferences;
@@ -57,15 +57,14 @@ class _ProposalDetailViewState extends State<ProposalDetailView> {
     skills.forEach((skill)=>skillChips.add(
         Padding(
           padding: const EdgeInsets.only(right: 5),
-          child: new ChoiceChip(
+          child: new ActionChip(
             label: Text(skill,
               style: TextStyle(
                 color: Colors.white,
               ),
             ),
-            selected: false,
-            backgroundColor: JobberTheme.white,
-            disabledColor: JobberTheme.accentColorHalf,
+            backgroundColor: JobberTheme.accentColor,
+            onPressed: ()=>{},
           ),
         )
     ));
@@ -78,7 +77,15 @@ class _ProposalDetailViewState extends State<ProposalDetailView> {
         appBar: AppBar(
           title: Hero(
             tag: 'propose_title'+widget.proposal.title,
-            child: Material(child: Text(widget.proposal.title))
+            child: Material(
+              color: Colors.transparent,
+              child: Text(widget.proposal.title,
+                style: TextStyle(
+                  fontWeight: FontWeight.bold,
+                  fontSize: 20,
+                ),
+              )
+            )
           ),
         ),
         body: Column(
@@ -89,7 +96,7 @@ class _ProposalDetailViewState extends State<ProposalDetailView> {
                 padding: const EdgeInsets.only(top:25,left: 15,right: 15),
                 child: Hero(
                   tag: 'propose_details'+widget.proposal.title,
-                  child: Material(child: Text(widget.proposal.description))
+                  child: Material(color: Colors.transparent, child: Text(widget.proposal.description))
                 ),
               ),
             ),
@@ -99,6 +106,7 @@ class _ProposalDetailViewState extends State<ProposalDetailView> {
                 child: Hero(
                   tag: 'propose_skills'+widget.proposal.title,
                   child: Material(
+                    color: Colors.transparent,
                     child: ListView(
                         scrollDirection: Axis.horizontal,
                         children: skillChips

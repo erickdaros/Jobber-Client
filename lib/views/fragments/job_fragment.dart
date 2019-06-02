@@ -2,16 +2,16 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
-import 'package:jobber/models/proposal_model.dart';
+import 'package:jobber/models/job_model.dart';
 import 'package:jobber/themes/jobber_theme.dart';
-import 'package:jobber/views/proposaldetail_view.dart';
+import 'package:jobber/views/jobdetail_view.dart';
 import 'package:jobber/widgets/easing_animation.dart';
 import 'package:jobber/widgets/job_card.dart';
 
-class ProposalFragment extends StatefulWidget {
+class JobFragment extends StatefulWidget {
 
   static String routeName = 'mainView';
-  static String title = 'Propostas';
+  static String title = 'Jobs';
 
   List<Proposal> litems = [Proposal("Projeto A","Projeto A com intuito de fazer tal coisa. A ideia é isso e tal gostariamos de fazer entre os dias 03 e 22. O objetivo principal desse projeto e conseguir realizar seu objetivo, atraves de ferramentas que auxiliem para que o objetivo seja atngido","",["PHP","Python"]),
     Proposal("Projeto B","Projeto B com intuito de fazer tal coisa. A ideia é isso e tal gostariamos de fazer entre os dias 03 e 22. O objetivo principal desse projeto e conseguir realizar seu objetivo, atraves de ferramentas que auxiliem para que o objetivo seja atngido","",["NodeJS",]),
@@ -24,13 +24,13 @@ class ProposalFragment extends StatefulWidget {
 
   final bool showAnimation;
 
-  ProposalFragment({Key key, this.showAnimation = false}) : super(key: key);
+  JobFragment({Key key, this.showAnimation = false}) : super(key: key);
 
   @override
-  _ProposalFragmentState createState() => _ProposalFragmentState();
+  _JobFragmentState createState() => _JobFragmentState();
 }
 
-class _ProposalFragmentState extends State<ProposalFragment> {
+class _JobFragmentState extends State<JobFragment> {
 
   final GlobalKey<RefreshIndicatorState> _refreshIndicatorKey =
   new GlobalKey<RefreshIndicatorState>();
@@ -84,7 +84,7 @@ class _ProposalFragmentState extends State<ProposalFragment> {
                   onTap: () {
                     Navigator.of(context).push(MaterialPageRoute<void>(
                         builder: (BuildContext context) {
-                          return ProposalDetailView(
+                          return JobDetailView(
                             proposal: widget.litems[index],
                           );
                         }));
