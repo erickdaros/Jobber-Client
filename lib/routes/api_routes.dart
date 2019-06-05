@@ -1,4 +1,4 @@
-const String apiAddress = "c300d46d.ngrok.io";
+const String apiAddress = "jobber.sytes.net";
 const String apiPort = "";
 
 class Routes{
@@ -13,6 +13,7 @@ class Routes{
 class ApiRoutes{
 
   String home = "";
+  String createJob = "/api/job";
   AuthRoutes auth;
 
   ApiRoutes(){

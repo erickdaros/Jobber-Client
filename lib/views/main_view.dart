@@ -4,6 +4,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:jobber/controllers/auth_controller.dart';
 import 'package:jobber/controllers/storage_controller.dart';
 import 'package:jobber/models/job_model.dart';
@@ -13,7 +14,10 @@ import 'package:jobber/views/newjob_view.dart';
 
 import '../main.dart';
 import 'fragments/fragment_handler.dart';
-import 'fragments/job_fragment.dart';
+import 'fragments/jobfeed_fragment.dart';
+import 'fragments/myfreelas_fragment.dart';
+import 'fragments/myjobs_fragment.dart';
+import 'fragments/notifications_fragment.dart';
 import 'fragments/settings_fragment.dart';
 import 'package:flutter_statusbarcolor/flutter_statusbarcolor.dart';
 
@@ -37,6 +41,9 @@ class _MainViewState extends State<MainView> with RouteAware {
   static const MethodChannel actionChannel = MethodChannel('method.channel');
 
   User user;
+
+  TabController myFreelasTabControler = new TabController(length: 2,vsync: ScrollableState());
+  TabController myJobsTabControler = new TabController(length: 3, vsync: ScrollableState());
 
   _MainViewState({Key key, @required this.user});
 
@@ -85,12 +92,12 @@ class _MainViewState extends State<MainView> with RouteAware {
     _scrollViewController = new ScrollController();
     viewPortKey = GlobalKey();
 
-    bodyContent = JobFragment(
+    bodyContent = JobFeedFragment(
       showAnimation: true,
     );
-    title = JobFragment.title;
+    title = JobFeedFragment.title;
     showFAB = true;
-    activeFragment = Fragment.Proposal;
+    activeFragment = Fragment.JobFeed;
     fetchData();
   }
 
@@ -108,12 +115,12 @@ class _MainViewState extends State<MainView> with RouteAware {
 
   void switchToFragment(Fragment fragment) {
     switch (fragment) {
-      case Fragment.Proposal:
+      case Fragment.JobFeed:
         setState(() {
-          bodyContent = JobFragment();
-          title = JobFragment.title;
+          bodyContent = JobFeedFragment();
+          title = JobFeedFragment.title;
           showFAB = true;
-          activeFragment = Fragment.Proposal;
+          activeFragment = Fragment.JobFeed;
         });
         break;
       case Fragment.Settings:
@@ -123,6 +130,32 @@ class _MainViewState extends State<MainView> with RouteAware {
           showFAB = false;
           activeFragment = Fragment.Settings;
         });
+        break;
+      case Fragment.MyFreelas:
+        setState(() {
+          bodyContent = MyFreelasFragment(tabController: myFreelasTabControler,);
+          title = MyFreelasFragment.title;
+          showFAB = false;
+          activeFragment = Fragment.MyFreelas;
+        });
+        break;
+      case Fragment.MyJobs:
+        setState(() {
+          bodyContent = MyJobsFragment(tabController: myJobsTabControler,);
+          title = MyJobsFragment.title;
+          showFAB = true;
+          activeFragment = Fragment.MyJobs;
+        });
+        break;
+      case Fragment.Notifications:
+        setState(() {
+          bodyContent = NotificationsFragment();
+          title = NotificationsFragment.title;
+          showFAB = false;
+          activeFragment = Fragment.Notifications;
+        });
+        break;
+      default:
         break;
     }
     closeDrawer();
@@ -236,39 +269,39 @@ class _MainViewState extends State<MainView> with RouteAware {
     SystemChrome.setEnabledSystemUIOverlays(SystemUiOverlay.values);
 //    SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle.light);
 
-    List<Proposal> litems = [
-      Proposal(
+    List<Job> litems = [
+      Job(
           "Projeto A",
           "Projeto A com intuito de fazer tal coisa. A ideia é isso e tal gostariamos de fazer entre os dias 03 e 22. O objetivo principal desse projeto e conseguir realizar seu objetivo, atraves de ferramentas que auxiliem para que o objetivo seja atngido",
           "",
           ["PHP", "Python"]),
-      Proposal(
+      Job(
           "Projeto B",
           "Projeto B com intuito de fazer tal coisa. A ideia é isso e tal gostariamos de fazer entre os dias 03 e 22. O objetivo principal desse projeto e conseguir realizar seu objetivo, atraves de ferramentas que auxiliem para que o objetivo seja atngido",
           "", [
         "NodeJS",
       ]),
-      Proposal(
+      Job(
           "Projeto C",
           "Projeto C com intuito de fazer tal coisa. A ideia é isso e tal gostariamos de fazer entre os dias 03 e 22. O objetivo principal desse projeto e conseguir realizar seu objetivo, atraves de ferramentas que auxiliem para que o objetivo seja atngido",
           "",
           ["PHP", "Python"]),
-      Proposal(
+      Job(
           "Projeto D",
           "Projeto D com intuito de fazer tal coisa. A ideia é isso e tal gostariamos de fazer entre os dias 03 e 22. O objetivo principal desse projeto e conseguir realizar seu objetivo, atraves de ferramentas que auxiliem para que o objetivo seja atngido",
           "",
           ["PHP", "Python"]),
-      Proposal(
+      Job(
           "Projeto E",
           "Projeto E com intuito de fazer tal coisa. A ideia é isso e tal gostariamos de fazer entre os dias 03 e 22. O objetivo principal desse projeto e conseguir realizar seu objetivo, atraves de ferramentas que auxiliem para que o objetivo seja atngido",
           "",
           ["PHP", "Python"]),
-      Proposal(
+      Job(
           "Projeto F",
           "Projeto F com intuito de fazer tal coisa. A ideia é isso e tal gostariamos de fazer entre os dias 03 e 22. O objetivo principal desse projeto e conseguir realizar seu objetivo, atraves de ferramentas que auxiliem para que o objetivo seja atngido",
           "",
           ["PHP", "Python"]),
-      Proposal(
+      Job(
           "Projeto com nome realmente muito muito muito mutissimo muitamente longo",
           "Projeto G com intuito de fazer tal coisa. A ideia é isso e tal gostariamos de fazer entre os dias 03 e 22. O objetivo principal desse projeto e conseguir realizar seu objetivo, atraves de ferramentas que auxiliem para que o objetivo seja atngido",
           "",
@@ -283,8 +316,12 @@ class _MainViewState extends State<MainView> with RouteAware {
           key: _scaffoldKey,
           appBar: AppBar(
             title: Text(title),
-//        backgroundColor: JobberTheme.white,
-            elevation: activeFragment == Fragment.Proposal ? 0 : 4,
+            elevation: activeFragment == Fragment.JobFeed ? 0 : 4,
+            bottom: activeFragment==Fragment.MyFreelas?
+              MyFreelasFragment.buildTabBar(myFreelasTabControler,context)
+                :activeFragment==Fragment.MyJobs?
+                  MyJobsFragment.buildTabBar(myJobsTabControler,context)
+                :null,
           ),
           drawer: Drawer(
             child: ListView(
@@ -323,64 +360,65 @@ class _MainViewState extends State<MainView> with RouteAware {
                   title: Row(
                     children: <Widget>[
                       Padding(
-                        padding: const EdgeInsets.only(right: 7),
-                        child: Icon(Icons.work),
+                        padding: const EdgeInsets.only(right: 10.3),
+                        child: Icon(FontAwesomeIcons.briefcase,size: 20,),
                       ),
                       Text('Jobs'),
                     ],
                   ),
                   onTap: () {
-                    switchToFragment(Fragment.Proposal);
+                    switchToFragment(Fragment.JobFeed);
                   },
                 ),
                 ListTile(
                   title: Row(
                     children: <Widget>[
                       Padding(
-                        padding: const EdgeInsets.only(right: 7),
-                        child: Icon(Icons.assessment),
+                        padding: const EdgeInsets.only(right: 10.3),
+                        child: Icon(FontAwesomeIcons.hammer,size: 20,),
                       ),
                       Text('Meus Freelas'),
                     ],
                   ),
                   onTap: () {
-                    // Update the state of the app
-                    // ...
+                    switchToFragment(Fragment.MyFreelas);
                   },
                 ),
                 ListTile(
                   title: Row(
                     children: <Widget>[
                       Padding(
-                        padding: const EdgeInsets.only(right: 7),
-                        child: Icon(Icons.work),
+                        padding: const EdgeInsets.only(right: 10.3),
+                        child: Icon(FontAwesomeIcons.fileSignature,size: 20,),
                       ),
                       Text('Meus Jobs'),
                     ],
                   ),
                   onTap: () {
-                    // Update the state of the app
-                    // ...
+                    switchToFragment(Fragment.MyJobs);
                   },
                 ),
                 ListTile(
                   title: Row(
                     children: <Widget>[
                       Padding(
-                        padding: const EdgeInsets.only(right: 7),
-                        child: Icon(Icons.notifications),
+                        padding: const EdgeInsets.only(right: 10.3),
+                        child: Icon(FontAwesomeIcons.solidBell,size: 20,),
                       ),
                       Text('Avisos'),
                     ],
                   ),
-                  onTap: () {},
+                  onTap: () {
+                    switchToFragment(Fragment.Notifications);
+                  },
                 ),
+                Divider(),
                 ListTile(
                   title: Row(
                     children: <Widget>[
                       Padding(
-                        padding: const EdgeInsets.only(right: 7),
-                        child: Icon(Icons.settings),
+                        padding: const EdgeInsets.only(right: 10.3),
+                        child: Icon(FontAwesomeIcons.cog,size: 20,),
                       ),
                       Text('Configurações'),
                     ],
@@ -393,13 +431,14 @@ class _MainViewState extends State<MainView> with RouteAware {
                   title: Row(
                     children: <Widget>[
                       Padding(
-                        padding: const EdgeInsets.only(right: 7),
-                        child: Icon(Icons.exit_to_app),
+                        padding: const EdgeInsets.only(right: 10.3),
+                        child: Icon(FontAwesomeIcons.signOutAlt, size: 20,),
                       ),
                       Text('Sair'),
                     ],
                   ),
                   onTap: () {
+                    closeDrawer();
                     showDialog(
                       context: context,
                       builder: (BuildContext context) {

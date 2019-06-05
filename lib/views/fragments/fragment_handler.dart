@@ -1,4 +1,7 @@
 enum Fragment {
-  Proposal,
-  Settings
+  JobFeed,
+  Notifications,
+  MyFreelas,
+  MyJobs,
+  Settings,
 }

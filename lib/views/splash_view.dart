@@ -67,9 +67,19 @@ class _SplashViewState extends State<SplashView> {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
-              Text(
-                'Jobber',
-                style: Theme.of(context).textTheme.display1.copyWith(color: Colors.white,fontFamily: 'Chillout'),
+              Row(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: <Widget>[
+                  Text(
+                    'J',
+                    style: Theme.of(context).textTheme.display1.copyWith(color: Colors.white,fontFamily: 'Chillout',fontSize: 140),
+                  ),
+                  Text(
+                    'obber',
+                    style: Theme.of(context).textTheme.display1.copyWith(color: Colors.white,fontFamily: 'Chillout',fontSize: 80),
+                  ),
+                ],
               ),
             ],
           ),

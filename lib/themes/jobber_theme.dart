@@ -7,12 +7,12 @@ class JobberTheme{
 
   static Color purple = const Color(0xFF7716a0);
 
-  static Color purple2 = const Color(0xFF7B05AF);
+  static Color purple2 = const Color(0xFF7B05AF);//
 
   static Color purpleHight = const Color(0xFF7d05cf);
   static Color purpleLow = const Color(0xFFec6ff7);
 
-  static Color accentColor = const Color(0xFF9D43DA);
+  static Color accentColor = const Color(0xFF7B05AF);//Color(0xFF9D43DA);
   static Color primaryColor = const Color(0xFF7d05cf);
   static Color accentColorHalf = const Color(0xFF7d05cf).withOpacity(0.75);
 

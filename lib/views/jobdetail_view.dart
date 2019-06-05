@@ -8,9 +8,9 @@ class JobDetailView extends StatefulWidget {
 
   static const String routeName = 'preference';
 
-  final Proposal proposal;
+  final Job job;
 
-  JobDetailView({Key key, @required this.proposal}): super(key: key);
+  JobDetailView({Key key, @required this.job}): super(key: key);
 
   @override
   State createState() => _JobDetailViewState();
@@ -53,7 +53,7 @@ class _JobDetailViewState extends State<JobDetailView> {
 
     List<Widget> skillChips = new List<Widget>();
 
-    List<String> skills = widget.proposal.skills;
+    List<String> skills = widget.job.skills;
     skills.forEach((skill)=>skillChips.add(
         Padding(
           padding: const EdgeInsets.only(right: 5),
@@ -76,10 +76,10 @@ class _JobDetailViewState extends State<JobDetailView> {
         key: _scaffoldKey,
         appBar: AppBar(
           title: Hero(
-            tag: 'propose_title'+widget.proposal.title,
+            tag: 'propose_title'+widget.job.title,
             child: Material(
               color: Colors.transparent,
-              child: Text(widget.proposal.title,
+              child: Text(widget.job.title,
                 style: TextStyle(
                   fontWeight: FontWeight.bold,
                   fontSize: 20,
@@ -95,8 +95,8 @@ class _JobDetailViewState extends State<JobDetailView> {
               child: Padding(
                 padding: const EdgeInsets.only(top:25,left: 15,right: 15),
                 child: Hero(
-                  tag: 'propose_details'+widget.proposal.title,
-                  child: Material(color: Colors.transparent, child: Text(widget.proposal.description))
+                  tag: 'propose_details'+widget.job.title,
+                  child: Material(color: Colors.transparent, child: Text(widget.job.description))
                 ),
               ),
             ),
@@ -104,7 +104,7 @@ class _JobDetailViewState extends State<JobDetailView> {
               child: Padding(
                 padding: const EdgeInsets.only(left: 15,right: 15),
                 child: Hero(
-                  tag: 'propose_skills'+widget.proposal.title,
+                  tag: 'propose_skills'+widget.job.title,
                   child: Material(
                     color: Colors.transparent,
                     child: ListView(

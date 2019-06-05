@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:jobber/themes/jobber_theme.dart';
 import 'package:jobber/utils/sysui_utils.dart';
 import 'package:jobber/widgets/responsive_container.dart';
+import 'package:shimmer/shimmer.dart';
 
 class JobCard extends StatelessWidget{
 
@@ -12,10 +13,12 @@ class JobCard extends StatelessWidget{
   final double heightPercent;
   final double widthModifier;
   final List<String> skills;
+  final bool isLoading;
 
   const JobCard({
     Key key,
     this.child,
+    this.isLoading = false,
     this.heightPercent,
     this.widthModifier,
     this.title="",
@@ -30,6 +33,7 @@ class JobCard extends StatelessWidget{
       child: Center(
         child: Column(mainAxisAlignment: MainAxisAlignment.center, children: [
           JobCardRoot(
+            isLoading: isLoading,
             widthModifier: widthModifier,
             heightPercent: heightPercent,
             title:title,
@@ -50,12 +54,14 @@ class JobCardRoot extends StatelessWidget {
   final bool isMini;
   final String description;
   final double heightPercent;
+  final isLoading;
   final double widthModifier;
   final List<String> skills;
 
   const JobCardRoot({
     Key key,
     this.child,
+    this.isLoading = false,
     this.isMini,
     this.description,
     this.heightPercent,
@@ -75,18 +81,52 @@ class JobCardRoot extends StatelessWidget {
     double aspect = queryData.size.width / queryData.size.height;
 
     List<Widget> skillChips = new List<Widget>();
+    List<Widget> loadingSkillChips = new List<Widget>();
 
     skills.forEach((skill)=>skillChips.add(
         Padding(
           padding: const EdgeInsets.only(right: 5),
           child: new ActionChip(
-            label: Text(skill,
+            label: isLoading?
+                Text(skill,
+                  style: TextStyle(
+                    color: Color(0xFFFFFFFF),
+                    backgroundColor: Color(0xFF000000),
+                  ),
+                ):Text(skill,
               style: TextStyle(
                 color: Color(0xFFFFFFFF),
               ),
             ),
             backgroundColor: JobberTheme.accentColor,
             onPressed: ()=>{},
+          ),
+        )
+    ));
+
+    skills.forEach((skill)=>loadingSkillChips.add(
+        Padding(
+          padding: const EdgeInsets.only(right: 5),
+          child: Shimmer.fromColors(
+            baseColor: Colors.grey[300],
+            highlightColor: Colors.grey[200],
+            period: Duration(seconds: 1),
+            direction: ShimmerDirection.ltr,
+            child: new ActionChip(
+              label: isLoading?
+              Text(skill,
+                style: TextStyle(
+                  color: Color(0xFFFFFFFF),
+                  backgroundColor: Color(0xFF000000),
+                ),
+              ):Text(skill,
+                style: TextStyle(
+                  color: Color(0xFFFFFFFF),
+                ),
+              ),
+              backgroundColor: JobberTheme.accentColor,
+              onPressed: ()=>{},
+            ),
           ),
         )
     ));
@@ -123,7 +163,25 @@ class JobCardRoot extends StatelessWidget {
                                     tag: 'propose_title'+title,
                                     child: Material(
                                       color: Colors.transparent,
-                                      child: new Text(
+                                      child: isLoading?
+                                      Shimmer.fromColors(
+                                          baseColor: Colors.grey[300],
+                                          highlightColor: Colors.grey[200],
+                                          period: Duration(seconds: 1),
+                                          direction: ShimmerDirection.ltr,
+                                          child:
+                                      Text(
+                                          title,
+                                          textAlign: TextAlign.left,
+                                          maxLines: 2,
+                                          overflow: TextOverflow.ellipsis,
+                                          style: TextStyle(
+                                            fontWeight: FontWeight.bold,
+                                            fontSize: 17,
+                                            backgroundColor: Color(0xFF000000)
+                                          )
+                                      ),)
+                                          :new Text(
                                           title,
                                           textAlign: TextAlign.left,
                                           maxLines: 2,
@@ -147,7 +205,23 @@ class JobCardRoot extends StatelessWidget {
                                 tag: 'propose_details'+title,
                                 child: Material(
                                   color: Colors.transparent,
-                                  child: Text(description,
+                                  child: isLoading?
+                                  Shimmer.fromColors(
+                                    baseColor: Colors.grey[300],
+                                    highlightColor: Colors.grey[200],
+                                    period: Duration(seconds: 1),
+                                    direction: ShimmerDirection.ltr,
+                                    child:
+                                  Text(description,
+                                    textAlign: TextAlign.justify,
+                                    overflow: TextOverflow.ellipsis,
+                                    maxLines: 4,
+                                    softWrap: false,
+                                    style: TextStyle(
+                                      backgroundColor: Color(0xFF000000)
+                                    ),
+                                  ),)
+                                      :Text(description,
                                     textAlign: TextAlign.justify,
                                     overflow: TextOverflow.ellipsis,
                                     maxLines: 4,
@@ -165,9 +239,20 @@ class JobCardRoot extends StatelessWidget {
                                 tag: 'propose_skills'+title,
                                 child: Material(
                                   color: Colors.transparent,
-                                  child: ListView(
-                                    scrollDirection: Axis.horizontal,
-                                    children: skillChips
+                                  child: isLoading? Shimmer.fromColors(
+                                    baseColor: Colors.grey[300],
+                                    highlightColor: Colors.grey[200],
+                                    period: Duration(seconds: 1),
+                                    direction: ShimmerDirection.ltr,
+                                    child: Container(
+                                      child: Row(
+//                                      scrollDirection: Axis.horizontal,
+                                        children: skillChips
+                                      ),
+                                    ),
+                                  ):ListView(
+                                      scrollDirection: Axis.horizontal,
+                                      children: skillChips
                                   ),
                                 ),
                               ),

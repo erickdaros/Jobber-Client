@@ -8,6 +8,7 @@ import 'package:jobber/controllers/storage_controller.dart';
 import 'package:jobber/themes/jobber_theme.dart' as Theme;
 import 'package:jobber/utils/network_utils.dart';
 import 'package:jobber/utils/sysui_utils.dart';
+import 'package:jobber/views/register_view.dart';
 import 'package:jobber/widgets/utils/bubble_indication_painter.dart';
 import 'package:outline_material_icons/outline_material_icons.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -103,6 +104,14 @@ class _LoginViewState extends State<LoginView> with SingleTickerProviderStateMix
         });
       }
     }
+  }
+
+  Future onRegisterPressed() async {
+    Navigator.of(context).push(MaterialPageRoute<void>(
+      builder: (BuildContext context) {
+        return RegisterView();
+      }
+    ));
   }
 
   Future<void> _minimize() async{
@@ -722,8 +731,7 @@ class _LoginViewState extends State<LoginView> with SingleTickerProviderStateMix
                             fontFamily: "WorkSansBold"),
                       ),
                     ),
-                    onPressed: () =>
-                        showInSnackBar(context,_scaffoldKey,"SignUp button pressed")),
+                    onPressed: onRegisterPressed ),
               ),
             ],
           ),

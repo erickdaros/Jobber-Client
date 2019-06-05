@@ -7,8 +7,14 @@ import 'package:jobber/views/main_view.dart';
 import 'package:jobber/views/newjob_view.dart';
 import 'package:jobber/views/splash_view.dart';
 import 'package:dynamic_theme/dynamic_theme.dart';
+import 'package:jobber/views/test_view.dart';
 
-void main() => runApp(Jobber());
+void main() {
+  SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp])
+      .then((_) {
+    runApp(new Jobber());
+  });
+}
 
 class Jobber extends StatelessWidget {
 
