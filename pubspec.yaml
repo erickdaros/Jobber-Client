@@ -33,6 +33,7 @@ dependencies:
   random_string: ^0.0.2
   shimmer: ^1.0.0
   dropdownfield: ^0.0.2
+  flutter_masked_text: ^0.8.0
 
 dev_dependencies:
   flutter_test:

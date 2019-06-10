@@ -113,6 +113,30 @@ class _MainViewState extends State<MainView> with RouteAware {
     }
   }
 
+  final List<String> _dropdownValues = [
+    "Para Mim",
+    "Mostrar Todos",
+  ];
+
+  String _currentlySelected = "Para Mim";
+
+  Widget dropdownWidget() {
+    return DropdownButton(
+      items: _dropdownValues
+          .map((value) => DropdownMenuItem(
+        child: Text(value),
+        value: value,
+      )).toList(),
+      onChanged: (String value) {
+        setState(() {
+          _currentlySelected = value;
+        });
+      },
+      isExpanded: false,
+      value: _currentlySelected,
+    );
+  }
+
   void switchToFragment(Fragment fragment) {
     switch (fragment) {
       case Fragment.JobFeed:
@@ -322,6 +346,9 @@ class _MainViewState extends State<MainView> with RouteAware {
                 :activeFragment==Fragment.MyJobs?
                   MyJobsFragment.buildTabBar(myJobsTabControler,context)
                 :null,
+            actions: activeFragment==Fragment.JobFeed?<Widget>[
+              dropdownWidget(),
+            ]:null,
           ),
           drawer: Drawer(
             child: ListView(

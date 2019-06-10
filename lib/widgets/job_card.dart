@@ -70,6 +70,33 @@ class JobCardRoot extends StatelessWidget {
     this.skills,
   }):super(key: key);
 
+
+  Widget _buildLoadingChip(double width){
+    return Shimmer.fromColors(
+      baseColor: Colors.grey[300],
+      highlightColor: Colors.grey[200],
+      period: Duration(seconds: 1),
+      direction: ShimmerDirection.ltr,
+      child: Padding(
+        padding: const EdgeInsets.only(bottom: 8, top: 8, right: 4),
+        child: Container(
+          width: width,
+//        height: 0.05,
+//          color: Colors.black,
+        decoration: new BoxDecoration(
+            color: Colors.white,
+            borderRadius: new BorderRadius.only(
+                topLeft: const Radius.circular(20.0),
+                topRight: const Radius.circular(20.0),
+                bottomLeft: const Radius.circular(20.0),
+                bottomRight: const Radius.circular(20.0),
+            )
+          ),
+        ),
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context){
 
@@ -104,30 +131,27 @@ class JobCardRoot extends StatelessWidget {
         )
     ));
 
+
+
     skills.forEach((skill)=>loadingSkillChips.add(
         Padding(
           padding: const EdgeInsets.only(right: 5),
-          child: Shimmer.fromColors(
-            baseColor: Colors.grey[300],
-            highlightColor: Colors.grey[200],
-            period: Duration(seconds: 1),
-            direction: ShimmerDirection.ltr,
-            child: new ActionChip(
-              label: isLoading?
-              Text(skill,
-                style: TextStyle(
-                  color: Color(0xFFFFFFFF),
-                  backgroundColor: Color(0xFF000000),
-                ),
-              ):Text(skill,
-                style: TextStyle(
-                  color: Color(0xFFFFFFFF),
-                ),
-              ),
-              backgroundColor: JobberTheme.accentColor,
-              onPressed: ()=>{},
-            ),
-          ),
+          child: Container()
+//          Shimmer.fromColors(
+//            baseColor: Colors.grey[300],
+//            highlightColor: Colors.grey[200],
+//            period: Duration(seconds: 1),
+//            direction: ShimmerDirection.ltr,
+//            child: Container(
+//              color: Colors.black,
+////              decoration: BoxDecoration(
+////                color: Colors.black,
+////                borderRadius: BorderRadius.all(
+////                    Radius.circular(15)
+////                ),
+////              ),
+//            ),
+//          ),
         )
     ));
 
@@ -239,18 +263,17 @@ class JobCardRoot extends StatelessWidget {
                                 tag: 'propose_skills'+title,
                                 child: Material(
                                   color: Colors.transparent,
-                                  child: isLoading? Shimmer.fromColors(
-                                    baseColor: Colors.grey[300],
-                                    highlightColor: Colors.grey[200],
-                                    period: Duration(seconds: 1),
-                                    direction: ShimmerDirection.ltr,
-                                    child: Container(
-                                      child: Row(
-//                                      scrollDirection: Axis.horizontal,
-                                        children: skillChips
-                                      ),
-                                    ),
-                                  ):ListView(
+                                  child: isLoading ?
+                                  ListView(
+                                    scrollDirection: Axis.horizontal,
+                                    children: <Widget>[
+                                      _buildLoadingChip(75),
+                                      _buildLoadingChip(100),
+                                      _buildLoadingChip(50),
+                                      _buildLoadingChip(70),
+                                    ],
+                                  )
+                                  :ListView(
                                       scrollDirection: Axis.horizontal,
                                       children: skillChips
                                   ),
@@ -269,33 +292,33 @@ class JobCardRoot extends StatelessWidget {
       );
     }else{
       return new Container(
-        child: new Card(
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(15.0),
-          ),
-          margin: EdgeInsets.only(right: 5.0, left: 5.0),
-          elevation: 16,
-          child: new Center(
-              child: ResponsiveContainer(
-                heightPercent: isIPhoneX(context) ? heightPercent - 10 : heightPercent*3.5,
-                setwidthModifier: true,
-                widthModifier: aspect,
-                child: Column(
-                  children: <Widget>[
-                    SizedBox(height: 22),
-                    new Text(
-                        title,
-                        style: TextStyle(
-                            fontWeight: FontWeight.bold,
-                            fontSize: 20
-                        )
-                    ),
-                    child
-                  ],
-                ),
-              )
-          ),
-        ),
+//        child: new Card(
+//          shape: RoundedRectangleBorder(
+//            borderRadius: BorderRadius.circular(15.0),
+//          ),
+//          margin: EdgeInsets.only(right: 5.0, left: 5.0),
+//          elevation: 16,
+//          child: new Center(
+//              child: ResponsiveContainer(
+//                heightPercent: isIPhoneX(context) ? heightPercent - 10 : heightPercent*3.5,
+//                setwidthModifier: true,
+//                widthModifier: aspect,
+//                child: Column(
+//                  children: <Widget>[
+//                    SizedBox(height: 22),
+//                    new Text(
+//                        title,
+//                        style: TextStyle(
+//                            fontWeight: FontWeight.bold,
+//                            fontSize: 20
+//                        )
+//                    ),
+//                    child
+//                  ],
+//                ),
+//              )
+//          ),
+//        ),
       );
     }
   }

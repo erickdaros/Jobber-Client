@@ -146,6 +146,15 @@ class _NewJobViewState extends State<NewJobView> {
   List<Widget> skillsTextFields = new List<Widget>();
   List<TextEditingController> skillsTextFieldsControllers = new List<TextEditingController>();
 
+  List<String> skills = <String>[
+    "PHP",
+    "JS",
+    "Node.JS",
+    "Flutter",
+  ];
+
+  bool showAdd = false;
+
   void addSkillTextField(){
     setState(() {
       skillsTextFieldsControllers.add(
@@ -158,11 +167,17 @@ class _NewJobViewState extends State<NewJobView> {
           new SkillTextField(
             key: skillsTextFieldsKeys[skillsTextFieldsKeys.length-1],
             controller: skillsTextFieldsControllers[skillsTextFieldsControllers.length-1],
+            skills: skills,
             onGetPosition: (key){
               return getSkillTextFieldPosition(key);
             },
             onDelete: (index){
               removeSkillTextField(index);
+            },
+            enableAdd: (){
+              setState(() {
+                showAdd = true;
+              });
             },
           ),
       );
@@ -486,9 +501,12 @@ class _NewJobViewState extends State<NewJobView> {
                           color: JobberTheme.white,
                           textColor: JobberTheme.purple,
                           child: Text("NOVA SKILL"),
-                          onPressed: skillsTextFieldsControllers.last.text==""?null:skillsTextFieldsControllers.last.text.length<2?null:(){
+                          onPressed: skillsTextFieldsControllers.last.text==""?null:skillsTextFieldsControllers.last.text.length>2||showAdd?(){
                             addSkillTextField();
-                          },
+                            setState(() {
+                              showAdd = false;
+                            });
+                          }:null
 //                          onPressed: false ? () {} : null
                         ),
                       ),

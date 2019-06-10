@@ -1,28 +1,27 @@
 import 'dart:convert';
 
-import 'package:flutter/widgets.dart';
 import 'package:http/http.dart' as http;
 import 'package:jobber/controllers/sharedpreferences_controller.dart';
 import 'package:jobber/models/job_model.dart';
-import 'package:jobber/models/loginresponse_model.dart';
+import 'package:jobber/models/skill_model.dart';
+import 'package:jobber/models/user_model.dart';
 import 'package:jobber/routes/api_routes.dart';
-import 'package:jobber/views/login_view.dart';
 
 import 'storage_controller.dart';
 
 class ApiController{
 
-  static Future<Job> createJob() async {
+  static Future<Job> createJob(Job newJob) async {
     String accessToken = "";
     bool isUserLoggedIn = await SharedPreferencesController.getBool(StorageKeys.isUserLoggedIn);
     if(isUserLoggedIn){
       accessToken = await SharedPreferencesController.getString(StorageKeys.accessToken);
       if(accessToken!=null){
-        if(isTokenValid(accessToken)){
-          return new Job("","","",[""]);
-        }else{
-          return new Job("","","",[""]);
-        }
+//        if(isTokenValid(accessToken)){
+//          return new Job("","","",[""]);
+//        }else{
+//          return new Job("","","",[""]);
+//        }
       }else{
         return new Job("","","",[""]);
       }
@@ -31,39 +30,76 @@ class ApiController{
     }
   }
 
-  static Future logout(context) async{
-    await SharedPreferencesController.setString(StorageKeys.accessToken,null);
-    await SharedPreferencesController.setBool(StorageKeys.isUserLoggedIn,false);
-    Navigator.of(context)
-        .pushReplacementNamed(LoginView.routeName);
-  }
+  static Future<List<Skill>> getJobberSkills() async {
 
-  static bool isTokenValid(String accessToken){
-    return true;
-  }
+    String getJobberSkillsUrl = Routes().api.home + Routes().api.getJobberSkills;
+    String accessToken = await SharedPreferencesController.getString(StorageKeys.accessToken);
 
-  static Future<LoginResponse> login(String email, String password) async {
+    print("getJobberSkillsUrl: "+getJobberSkillsUrl);
 
-    String loginUrl = Routes().api.auth.login;
-
-    Map<String, String> body = {
-      'title': "Teste",
-      'description': "Teste",
-      'minPrice' : "32",
-      'maxPrice' : "33",
+    Map<String, String> headers = {
+      'Authorization': accessToken,
     };
 
-    LoginResponse lResponse = await http.post(loginUrl,
-      body: body,
+    List<Skill> skills = await http.get(getJobberSkillsUrl,
+      headers: headers,
     ).then((http.Response response){
       if(response.statusCode==200){
-        return LoginResponse.fromJson(json.decode(response.body));
+        List<Skill> skills = new List<Skill>();
+        List<dynamic> parsedJson = json.decode(response.body);
+
+        for(int i=0; i<parsedJson.length; i++){
+          skills.add(
+            Skill.fromJson(parsedJson[i])
+          );
+        }
+
+        return skills;
       }else{
+        print("response: "+response.body);
         return null;
       }
     });
 
-    return lResponse;
+    return skills;
+  }
+
+  static Future<User> addUserSkills(List<String> skills) async {
+
+    String addUserSkillsUrl = Routes().api.home + "/api/user/skill/add";
+
+    print("addUserSkillsUrl: "+addUserSkillsUrl);
+
+    String accessToken = await SharedPreferencesController.getString(StorageKeys.accessToken);
+
+    Map<String, String> headers = {
+      'Authorization': accessToken,
+      'Content-Type' : 'application/json',
+    };
+
+    Map<String, List<String>> body = {};
+    body["skills"] = skills;
+    String bodyStr = json.encode(body);
+    print(bodyStr);
+
+    User user = await http.post(addUserSkillsUrl,
+      headers: headers,
+      body: bodyStr,
+    ).then((http.Response response){
+      if(response.statusCode==200){
+
+        print("response: "+response.body);
+
+        User user = new User.fromJson(json.decode(response.body));
+
+        return user;
+      }else{
+        print("response: "+response.body);
+        return null;
+      }
+    });
+
+    return user;
   }
 
   Future<http.Response> fetchPost() async {

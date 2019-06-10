@@ -72,8 +72,8 @@ class _JobFeedFragmentState extends State<JobFeedFragment> {
       builder: (BuildContext context, AsyncSnapshot<String> snapshot) {
         switch (snapshot.connectionState) {
           case ConnectionState.waiting: return ListView.builder(
-              itemCount: widget.litems.length,
-              physics: BouncingScrollPhysics(),
+              itemCount: 3,
+              physics: NeverScrollableScrollPhysics(),
               itemBuilder: (BuildContext context, int index) {
                 return Padding(
                   padding: index==0?const EdgeInsets.only(top: 15, bottom: 25):const EdgeInsets.only(bottom: 25),

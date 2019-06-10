@@ -14,6 +14,7 @@ class ApiRoutes{
 
   String home = "";
   String createJob = "/api/job";
+  String getJobberSkills = "/api/skill";
   AuthRoutes auth;
 
   ApiRoutes(){

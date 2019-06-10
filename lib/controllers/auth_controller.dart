@@ -4,6 +4,7 @@ import 'package:flutter/widgets.dart';
 import 'package:http/http.dart' as http;
 import 'package:jobber/controllers/sharedpreferences_controller.dart';
 import 'package:jobber/models/loginresponse_model.dart';
+import 'package:jobber/models/registerresponse_model.dart';
 import 'package:jobber/routes/api_routes.dart';
 import 'package:jobber/views/login_view.dart';
 
@@ -38,6 +39,7 @@ class AuthController{
   }
 
   static bool isTokenValid(String accessToken){
+    //TODO: Verificar se o AT é válido na API.
     return true;
   }
 
@@ -61,6 +63,35 @@ class AuthController{
     });
 
     return lResponse;
+  }
+
+  static Future<RegisterResponse> register(String name, String email, String password, String cellphone) async {
+
+    String loginUrl = Routes().api.auth.register;
+
+    Map<String, String> body = {
+      'name': name,
+      'email': email,
+      'password': password,
+      'cellphone': cellphone,
+    };
+
+    RegisterResponse rResponse = await http.post(loginUrl,
+      body: body,
+    ).then((http.Response response){
+      if(response.statusCode==200){
+        RegisterResponse rResponse = RegisterResponse.fromJson(json.decode(response.body));
+        rResponse.success = true;
+        return rResponse;
+      }else{
+        RegisterResponse rResponse = RegisterResponse(user: null,accessToken: null);
+        rResponse.success = false;
+        rResponse.message = json.decode(response.body)['message'];
+        return rResponse;
+      }
+    });
+
+    return rResponse;
   }
 
   Future<http.Response> fetchPost() async {

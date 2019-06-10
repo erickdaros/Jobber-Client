@@ -1,14 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
+import 'package:jobber/controllers/api_controller.dart';
 import 'package:jobber/controllers/auth_controller.dart';
 import 'package:jobber/controllers/sharedpreferences_controller.dart';
 import 'package:jobber/controllers/storage_controller.dart';
+import 'package:jobber/models/skill_model.dart';
 import 'package:jobber/models/user_model.dart';
 import 'package:jobber/themes/jobber_theme.dart';
 import 'package:jobber/views/login_view.dart';
 import 'package:jobber/views/main_view.dart';
 import 'package:flutter_statusbarcolor/flutter_statusbarcolor.dart';
+
+import 'completeregister_view.dart';
 
 class SplashView extends StatefulWidget {
 
@@ -41,16 +45,27 @@ class _SplashViewState extends State<SplashView> {
       await SharedPreferencesController.setBool(StorageKeys.isUserLoggedIn, false);
       await SharedPreferencesController.setBool(StorageKeys.isFirstTime, false);
     }
-    bool isUserAuthenticated =  await AuthController.isUserAuthenticated();
+    bool isUserAuthenticated = await AuthController.isUserAuthenticated();
     if(isUserAuthenticated){
+      bool isUserFirstSetupFinished = await SharedPreferencesController.getBool(StorageKeys.isUserFirstSetupFinished);
       User user = await StorageController.getLocalUser();
-//      Navigator.of(context)
-//          .pushReplacementNamed(MainView.routeName);
-      Navigator.of(context).push(MaterialPageRoute<void>(
-          builder: (BuildContext context) {
-            return MainView(user: user,);
-          }
-      ));
+      if(isUserFirstSetupFinished){
+        Navigator.of(context).push(MaterialPageRoute<void>(
+            builder: (BuildContext context) {
+              return MainView(user: user,);
+            }
+        ));
+      }else{
+        List<Skill> skills = await ApiController.getJobberSkills();
+        Navigator.of(context).push(MaterialPageRoute<void>(
+            builder: (BuildContext context) {
+              return CompleteRegisterView(
+                user: user,
+                skills: skills,
+              );
+            }
+        ));
+      }
     }else{
       Navigator.of(context)
           .pushReplacementNamed(LoginView.routeName);

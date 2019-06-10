@@ -5,6 +5,25 @@ class JobberTheme{
 
   const JobberTheme();
 
+  static const MaterialColor mPurple = const MaterialColor(
+    0xFF7716A0,
+    const <int, Color>{
+      50:  const Color(0xFFEFE3F4),
+      100: const Color(0xFFD6B9E3),
+      200: const Color(0xFFBB8BD0),
+      300: const Color(0xFFA05CBD),
+      400: const Color(0xFF8B39AE),
+      500: const Color(0xFF7716A0),
+      600: const Color(0xFF6F1398),
+      700: const Color(0xFF64108E),
+      800: const Color(0xFF5A0C84),
+      900: const Color(0xFF470673),
+    },
+  );
+
+  static const a400Purple = const Color(0xFFA63CFF);
+  static const a700Purple = const Color(0xFF9B23FF);
+
   static Color purple = const Color(0xFF7716a0);
 
   static Color purple2 = const Color(0xFF7B05AF);//
