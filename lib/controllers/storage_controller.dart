@@ -24,6 +24,11 @@ class StorageKeys{
   static const isUserLoggedIn = "isuserloggedin";
 
   static const isFirstTime = "isfirsttime";
+
+  //Cache control
+  static const isJobFeedCached = "isjobfeedcached";
+  static const isMyFreelasCached = "ismyfreelascached";
+  static const isMyJobsCached = "ismyjobscached";
 }
 
 class StorageController{

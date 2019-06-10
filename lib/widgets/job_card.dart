@@ -71,10 +71,10 @@ class JobCardRoot extends StatelessWidget {
   }):super(key: key);
 
 
-  Widget _buildLoadingChip(double width){
+  Widget _buildLoadingChip(context, double width){
     return Shimmer.fromColors(
-      baseColor: Colors.grey[300],
-      highlightColor: Colors.grey[200],
+      baseColor: JobberTheme.shimmerBaseColor(context),
+      highlightColor: JobberTheme.shimmerHighlightColor(context),
       period: Duration(seconds: 1),
       direction: ShimmerDirection.ltr,
       child: Padding(
@@ -189,8 +189,8 @@ class JobCardRoot extends StatelessWidget {
                                       color: Colors.transparent,
                                       child: isLoading?
                                       Shimmer.fromColors(
-                                          baseColor: Colors.grey[300],
-                                          highlightColor: Colors.grey[200],
+                                          baseColor: JobberTheme.shimmerBaseColor(context),
+                                          highlightColor: JobberTheme.shimmerHighlightColor(context),
                                           period: Duration(seconds: 1),
                                           direction: ShimmerDirection.ltr,
                                           child:
@@ -231,8 +231,8 @@ class JobCardRoot extends StatelessWidget {
                                   color: Colors.transparent,
                                   child: isLoading?
                                   Shimmer.fromColors(
-                                    baseColor: Colors.grey[300],
-                                    highlightColor: Colors.grey[200],
+                                    baseColor: JobberTheme.shimmerBaseColor(context),
+                                    highlightColor: JobberTheme.shimmerHighlightColor(context),
                                     period: Duration(seconds: 1),
                                     direction: ShimmerDirection.ltr,
                                     child:
@@ -267,10 +267,10 @@ class JobCardRoot extends StatelessWidget {
                                   ListView(
                                     scrollDirection: Axis.horizontal,
                                     children: <Widget>[
-                                      _buildLoadingChip(75),
-                                      _buildLoadingChip(100),
-                                      _buildLoadingChip(50),
-                                      _buildLoadingChip(70),
+                                      _buildLoadingChip(context, 75),
+                                      _buildLoadingChip(context, 100),
+                                      _buildLoadingChip(context, 50),
+                                      _buildLoadingChip(context, 70),
                                     ],
                                   )
                                   :ListView(

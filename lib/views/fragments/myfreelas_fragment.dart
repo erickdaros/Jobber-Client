@@ -1,4 +1,8 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
+import 'package:jobber/controllers/sharedpreferences_controller.dart';
+import 'package:jobber/controllers/storage_controller.dart';
 import 'package:jobber/models/job_model.dart';
 import 'package:jobber/themes/jobber_theme.dart';
 import 'package:jobber/widgets/job_card.dart';
@@ -27,7 +31,8 @@ class MyFreelasFragment extends StatefulWidget {
     );
   }
 
-  MyFreelasFragment({Key key, this.tabController}) : super(key: key);
+  final bool isCached;
+  MyFreelasFragment({Key key, this.tabController, this.isCached = false}) : super(key: key);
 
   @override
   State createState() => _MyFreelasFragmentState();
@@ -35,7 +40,9 @@ class MyFreelasFragment extends StatefulWidget {
 
 class _MyFreelasFragmentState extends State<MyFreelasFragment> {
 
+  bool isCached;
 
+  _MyFreelasFragmentState({Key key, this.isCached = false});
 
   @override
   void initState() {
@@ -60,8 +67,14 @@ class _MyFreelasFragmentState extends State<MyFreelasFragment> {
   }
 
   Future<String> _fetchNetworkCall() async{
-    await Future.delayed(const Duration(seconds: 3), () => "3");
-    print("Terminado carregamento");
+    if(!isCached){
+      await Future.delayed(const Duration(seconds: 3), () => "3");
+      print("Terminado carregamento");
+      await SharedPreferencesController.setBool(StorageKeys.isMyFreelasCached, true);
+      setState(() {
+        isCached = true;
+      });
+    }
     return "";
   }
 
@@ -71,10 +84,10 @@ class _MyFreelasFragmentState extends State<MyFreelasFragment> {
       controller: widget.tabController,
       children: <Widget>[
         new FutureBuilder<String>(
-      future: _fetchNetworkCall(), // async work
+      future: isCached ? null : _fetchNetworkCall(), // async work
       builder: (BuildContext context, AsyncSnapshot<String> snapshot) {
         switch (snapshot.connectionState) {
-          case ConnectionState.waiting: return new StatefulListView(isLoading: true,);
+          case ConnectionState.waiting: return new StatefulListView(isLoading: true,isCached: isCached,);
           default:
             if (snapshot.hasError)
               return new Text('Erro: ${snapshot.error}');
@@ -118,10 +131,11 @@ const List<List<Job>> content = const <List<Job>>[
 ];
 
 class JobList extends StatelessWidget {
-  const JobList({Key key, this.jobs,}) : super(key: key);
+
+  JobList({Key key, this.jobs, this.isCached = false}) : super(key: key);
 
   final List<Job> jobs;
-
+  bool isCached;
 
   Widget build_ListView(BuildContext context){
     return ListView.builder(
@@ -183,10 +197,11 @@ class JobList extends StatelessWidget {
 }
 
 class StatefulListView extends StatefulWidget {
-  StatefulListView({Key key,this.jobs,this.isLoading=false}) : super(key: key);
+  StatefulListView({Key key,this.jobs,this.isLoading=false, this.isCached =false}) : super(key: key);
 
   final List<Job> jobs;
   final bool isLoading;
+  bool isCached;
 //  final SetOffsetMethod setOffsetMethod;
 
   @override
@@ -196,6 +211,9 @@ class StatefulListView extends StatefulWidget {
 class _StatefulListViewState extends State<StatefulListView> {
 
   ScrollController scrollController;
+  bool isCached;
+
+  _StatefulListViewState({Key key, this.isCached = false});
 
   final GlobalKey<RefreshIndicatorState> _refreshIndicatorKey =
   new GlobalKey<RefreshIndicatorState>();
@@ -211,8 +229,10 @@ class _StatefulListViewState extends State<StatefulListView> {
   ];
 
   Future<Null> _refresh() async {
-    setState(() {
-      print("Refresh");
+    Timer(Duration(milliseconds: 350), () {
+      setState(() {
+        isCached = false;
+      });
     });
   }
 
@@ -269,8 +289,8 @@ class _StatefulListViewState extends State<StatefulListView> {
                   child: Padding(
                     padding: const EdgeInsets.symmetric(vertical: 25, horizontal: 15),
                     child:  Shimmer.fromColors(
-                        baseColor: Colors.grey[300],
-                        highlightColor: Colors.grey[200],
+                        baseColor: JobberTheme.shimmerBaseColor(context),
+                        highlightColor: JobberTheme.shimmerHighlightColor(context),
                         period: Duration(seconds: 1),
                         direction: ShimmerDirection.ltr,
                         child: Text(loadingData[index],style: TextStyle(backgroundColor: Color(0xFF000000)),)

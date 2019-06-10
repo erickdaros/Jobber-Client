@@ -1,5 +1,6 @@
 import 'dart:ui';
 import 'package:flutter/material.dart';
+import 'package:jobber/utils/sysui_utils.dart';
 
 class JobberTheme{
 
@@ -52,6 +53,14 @@ class JobberTheme{
 
   static const Color loginGradientStart = const Color(0xFFd500ff);
   static const Color loginGradientEnd = const Color(0xFF3f0979);
+
+  static Color shimmerBaseColor(context){
+    return isDarkModeEnabledByContext(context)?Colors.grey[700]:Colors.grey[300];
+  }
+
+  static Color shimmerHighlightColor(context){
+    return isDarkModeEnabledByContext(context)?Colors.grey[600]:Colors.grey[200];
+  }
 
   static const primaryGradient = const LinearGradient(
     colors: const [loginGradientStart, loginGradientEnd],

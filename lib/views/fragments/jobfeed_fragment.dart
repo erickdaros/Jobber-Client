@@ -1,7 +1,11 @@
+import 'dart:async';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
+import 'package:jobber/controllers/sharedpreferences_controller.dart';
+import 'package:jobber/controllers/storage_controller.dart';
 import 'package:jobber/models/job_model.dart';
 import 'package:jobber/themes/jobber_theme.dart';
 import 'package:jobber/views/jobdetail_view.dart';
@@ -23,11 +27,12 @@ class JobFeedFragment extends StatefulWidget {
   ];
 
   final bool showAnimation;
+  final bool isCached;
 
-  JobFeedFragment({Key key, this.showAnimation = false}) : super(key: key);
+  JobFeedFragment({Key key, this.showAnimation = false, this.isCached = false}) : super(key: key);
 
   @override
-  _JobFeedFragmentState createState() => _JobFeedFragmentState();
+  _JobFeedFragmentState createState() => _JobFeedFragmentState(isCached: isCached);
 }
 
 class _JobFeedFragmentState extends State<JobFeedFragment> {
@@ -35,14 +40,19 @@ class _JobFeedFragmentState extends State<JobFeedFragment> {
   final GlobalKey<RefreshIndicatorState> _refreshIndicatorKey =
   new GlobalKey<RefreshIndicatorState>();
 
+  bool isCached;
+
+  _JobFeedFragmentState({Key key, this.isCached = false});
+
   bool isGrid = true;
 
   ScrollController _scrollViewController;
   GlobalKey viewPortKey;
 
+
+
   @override
   void initState() {
-    super.initState();
     SystemChrome.setEnabledSystemUIOverlays(SystemUiOverlay.values);
     _scrollViewController = new ScrollController();
     viewPortKey = GlobalKey();
@@ -54,21 +64,33 @@ class _JobFeedFragmentState extends State<JobFeedFragment> {
     super.dispose();
   }
 
-  Future<Null> _refresh() async {}
+  Future<Null> _refresh() async {
+    Timer(Duration(milliseconds: 350), () {
+      setState(() {
+        isCached = false;
+      });
+    });
+  }
 
   void _onGridChange(bool value) {
     setState(() => isGrid = value);
   }
 
   Future<String> _fetchNetworkCall() async{
-    await Future.delayed(const Duration(seconds: 3), () => "3");
-    print("Terminado carregamento");
+    if(!isCached){
+      await Future.delayed(const Duration(seconds: 3), () => "3");
+      print("Terminado carregamento");
+      await SharedPreferencesController.setBool(StorageKeys.isJobFeedCached, true);
+      setState(() {
+        isCached = true;
+      });
+    }
     return "";
   }
 
   Widget build_ListView(BuildContext context){
     return  new FutureBuilder<String>(
-      future: _fetchNetworkCall(),
+      future: isCached ? null : _fetchNetworkCall(),
       builder: (BuildContext context, AsyncSnapshot<String> snapshot) {
         switch (snapshot.connectionState) {
           case ConnectionState.waiting: return ListView.builder(

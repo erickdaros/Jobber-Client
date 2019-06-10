@@ -6,6 +6,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:jobber/controllers/auth_controller.dart';
+import 'package:jobber/controllers/sharedpreferences_controller.dart';
 import 'package:jobber/controllers/storage_controller.dart';
 import 'package:jobber/models/job_model.dart';
 import 'package:jobber/models/user_model.dart';
@@ -137,11 +138,24 @@ class _MainViewState extends State<MainView> with RouteAware {
     );
   }
 
+  bool isJobFeedCached = false;
+  bool isMyFreelasCached = false;
+  bool isMyJobsCached =false;
+
+  Future updateIsCached() async {
+    isJobFeedCached = await SharedPreferencesController.getBool(StorageKeys.isJobFeedCached);
+    isMyFreelasCached = await SharedPreferencesController.getBool(StorageKeys.isMyFreelasCached);
+    isMyJobsCached = await SharedPreferencesController.getBool(StorageKeys.isMyJobsCached);
+  }
+
   void switchToFragment(Fragment fragment) {
+    updateIsCached();
     switch (fragment) {
       case Fragment.JobFeed:
         setState(() {
-          bodyContent = JobFeedFragment();
+          bodyContent = JobFeedFragment(
+            isCached: isJobFeedCached,
+          );
           title = JobFeedFragment.title;
           showFAB = true;
           activeFragment = Fragment.JobFeed;
@@ -157,7 +171,10 @@ class _MainViewState extends State<MainView> with RouteAware {
         break;
       case Fragment.MyFreelas:
         setState(() {
-          bodyContent = MyFreelasFragment(tabController: myFreelasTabControler,);
+          bodyContent = MyFreelasFragment(
+            tabController: myFreelasTabControler,
+            isCached: isMyFreelasCached,
+          );
           title = MyFreelasFragment.title;
           showFAB = false;
           activeFragment = Fragment.MyFreelas;
@@ -165,7 +182,10 @@ class _MainViewState extends State<MainView> with RouteAware {
         break;
       case Fragment.MyJobs:
         setState(() {
-          bodyContent = MyJobsFragment(tabController: myJobsTabControler,);
+          bodyContent = MyJobsFragment(
+            tabController: myJobsTabControler,
+            isCached: isMyJobsCached,
+          );
           title = MyJobsFragment.title;
           showFAB = true;
           activeFragment = Fragment.MyJobs;

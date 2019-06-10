@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:jobber/controllers/sharedpreferences_controller.dart';
+import 'package:jobber/controllers/storage_controller.dart';
 import 'package:jobber/models/job_model.dart';
 import 'package:jobber/themes/jobber_theme.dart';
 import 'package:jobber/widgets/job_card.dart';
@@ -9,7 +11,7 @@ import '../jobdetail_view.dart';
 class MyJobsFragment extends StatefulWidget {
 
   static String routeName = 'myfreelasView';
-  static String title = 'Meus Freelas';
+  static String title = 'Meus Jobs';
 
   final TabController tabController;
 
@@ -28,7 +30,9 @@ class MyJobsFragment extends StatefulWidget {
     );
   }
 
-  MyJobsFragment({Key key, this.tabController}) : super(key: key);
+  final bool isCached;
+
+  MyJobsFragment({Key key, this.tabController, this.isCached = false}) : super(key: key);
 
   @override
   State createState() => _MyJobsFragmentState();
@@ -36,7 +40,8 @@ class MyJobsFragment extends StatefulWidget {
 
 class _MyJobsFragmentState extends State<MyJobsFragment> {
 
-
+  bool isCached;
+  _MyJobsFragmentState({Key key, this.isCached = false});
 
   @override
   void initState() {
@@ -66,8 +71,14 @@ class _MyJobsFragmentState extends State<MyJobsFragment> {
   }
 
   Future<String> _fetchNetworkCall() async{
-    await Future.delayed(const Duration(seconds: 3), () => "3");
-    print("Terminado carregamento");
+    if(!isCached){
+      await Future.delayed(const Duration(seconds: 3), () => "3");
+      print("Terminado carregamento");
+      await SharedPreferencesController.setBool(StorageKeys.isMyJobsCached, true);
+      setState(() {
+        isCached = true;
+      });
+    }
     return "";
   }
 
@@ -77,7 +88,7 @@ class _MyJobsFragmentState extends State<MyJobsFragment> {
       controller: widget.tabController,
       children: <Widget>[
         new FutureBuilder<String>(
-          future: _fetchNetworkCall(), // async work
+          future: isCached ? null : _fetchNetworkCall(), // async work
           builder: (BuildContext context, AsyncSnapshot<String> snapshot) {
             switch (snapshot.connectionState) {
               case ConnectionState.waiting: return new StatefulListView(isLoading: true,);
@@ -289,8 +300,8 @@ class _StatefulListViewState extends State<StatefulListView> {
                   child: Padding(
                     padding: const EdgeInsets.symmetric(vertical: 25, horizontal: 15),
                     child:  Shimmer.fromColors(
-                        baseColor: Colors.grey[300],
-                        highlightColor: Colors.grey[200],
+                        baseColor: JobberTheme.shimmerBaseColor(context),
+                        highlightColor: JobberTheme.shimmerHighlightColor(context),
                         period: Duration(seconds: 1),
                         direction: ShimmerDirection.ltr,
                         child: Text(loadingData[index],style: TextStyle(backgroundColor: Color(0xFF000000)),)
